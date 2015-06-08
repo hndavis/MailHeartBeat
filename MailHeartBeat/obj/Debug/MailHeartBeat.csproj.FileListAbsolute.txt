@@ -1,0 +1,10 @@
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\MailHeartBeat.exe.config
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.csprojResolveAssemblyReference.cache
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\MailHeartBeat.exe
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\MailHeartBeat.pdb
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\Mail.dll
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\Mail.xml
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.exe
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.pdb
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\log4net.dll
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\log4net.xml
