@@ -20,6 +20,8 @@ namespace MailHeartBeat
 {
     internal class HeartBeatListener
     {
+        // to install
+        //c:\windows\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe $(TargetPath)
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 	
         private const string Server = "imap-mail.outlook.com"; //"imap.server.com";
@@ -31,42 +33,57 @@ namespace MailHeartBeat
         private Dictionary<DateTime, long> _messageTimes = new Dictionary<DateTime, long>();
         private const int initialCheckWaitTime = 12;
         private int CheckWaitTime;
+        volatile  bool canRun = true;
+        private AutoResetEvent closeDown = new AutoResetEvent(false);
+        Task t;
+        CancellationTokenSource cts = new CancellationTokenSource();
+       
+
+
 
         private static ICriterion _searchExp = Expression.And(
             // Expression.From("Frederick Davis"),
             Expression.From(mailSubject),
             Expression.SentSince(DateTime.Now.AddDays(-2)));
 
-        private static void Main(string[] args)
-        {
 
-            HeartBeatListener hbl = new HeartBeatListener(); 
-            hbl.Run();
+
+        public HeartBeatListener()
+        {
+           
         }
 
-        private void Run()
+        public void Run()
         {
-            log.Info("Staring MailHeartBeat for" + mailSubject);
-            CheckWaitTime = initialCheckWaitTime;
-            while (true)
-            {
+            log.Info("Run MailHeartBeat for" + mailSubject);
+            t = Task.Factory.StartNew(() =>
+          {
+              log.Info("Staring MailHeartBeat for" + mailSubject);
+              CheckWaitTime = initialCheckWaitTime;
+              while (canRun)
+              {
 
 
-                GetHeartBeatMessages();
-                if (CheckHeartBeat())
-                {
-                    CheckWaitTime = initialCheckWaitTime;
-                }
-                else
-                {
-                    List<IMail> resp = new List<IMail>();
-                    resp.Add(GenerateInterogativeMessage(mailSubject));
-                    resp.Add(GenerateBadHeartBeatResponse());
-                    sendStatusUpdate(resp);
-                    CheckWaitTime = 1;
-                }
-                Thread.Sleep(60000 * 60 * CheckWaitTime);
-            }
+                  GetHeartBeatMessages();
+                  if (CheckHeartBeat())
+                  {
+                      CheckWaitTime = initialCheckWaitTime;
+                  }
+                  else
+                  {
+                      List<IMail> resp = new List<IMail>();
+                      resp.Add(GenerateInterogativeMessage(mailSubject));
+                      resp.Add(GenerateBadHeartBeatResponse());
+                      sendStatusUpdate(resp);
+                      CheckWaitTime = 1;
+                  }
+                  if ( closeDown.WaitOne(60000 * 60 * CheckWaitTime) )
+                  {
+                      canRun = false;
+                  }
+                  
+              }
+          });
         }
 
         private IMail GenerateInterogativeMessage(string mailAddress)
@@ -168,6 +185,14 @@ namespace MailHeartBeat
             }
             return;
         }
+
+       public  void StartShutDown()
+        {
+            log.Info("Received Shutdown Request");
+            closeDown.Set();
+        }
+
+        
     }
 }
 

@@ -8,3 +8,5 @@ C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.exe
 C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.pdb
 C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\log4net.dll
 C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\bin\Debug\log4net.xml
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.ProjectInstaller.resources
+C:\Users\hndavis\dev\MailHeartBeat\MailHeartBeat\obj\Debug\MailHeartBeat.csproj.GenerateResource.Cache
