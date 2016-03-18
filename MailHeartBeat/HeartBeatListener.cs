@@ -13,6 +13,7 @@ using System.Threading;
 using log4net;
 using log4net.Repository.Hierarchy;
 using Limilabs.Client;
+using System.Configuration;
 
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
@@ -24,12 +25,12 @@ namespace MailHeartBeat
         //c:\windows\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe $(TargetPath)
         private static readonly ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 	
-        private const string Server = "imap-mail.outlook.com"; //"imap.server.com";
-        private const string SMTPServer = "smtp.live.com";
-        private const string User = "h_n_davis@hotmail.com";
-        private const string Password = "YaelEtta3";
-        private List<string> mailMonitor = new List<string>() {"hndavis983@outlook.com", "heddydavis@hotmail.com"};
-        private const string mailSubject = "fsdavis@bellsouth.net";
+        private  string Server = "imap-mail.outlook.com"; //"imap.server.com";
+        private  string SMTPServer = "smtp.live.com";
+        private  string User = "h_n_davis@hotmail.com";
+        private  string Password = "YaelEtta3";
+        private List<string> mailMonitor = new List<string>() {"hndavis983@outlook.com"};
+        private  static string mailSubject = "fsdavis@bellsouth.net";
         private Dictionary<DateTime, long> _messageTimes = new Dictionary<DateTime, long>();
         private const int initialCheckWaitTime = 12;
         private int CheckWaitTime;
@@ -41,7 +42,7 @@ namespace MailHeartBeat
 
 
 
-        private static ICriterion _searchExp = Expression.And(
+        static private  ICriterion _searchExp = Expression.And(
             // Expression.From("Frederick Davis"),
             Expression.From(mailSubject),
             Expression.SentSince(DateTime.Now.AddDays(-2)));
@@ -50,7 +51,20 @@ namespace MailHeartBeat
 
         public HeartBeatListener()
         {
-           
+             Server  = ConfigurationManager.AppSettings["Server"];  //"imap -mail.outlook.com"; //"imap.server.com";
+            SMTPServer =  ConfigurationManager.AppSettings["SMTPServer"]; // "smtp.live.com";
+            User = ConfigurationManager.AppSettings["User"];// h_n_davis@hotmail.com";
+            Password = ConfigurationManager.AppSettings["Password"];
+            string mailMonitors = ConfigurationManager.AppSettings["mailMonitor"];
+            
+            var mailMonitorItems = mailMonitors.Split(',');
+            foreach( var monitor in mailMonitorItems)
+            {
+                mailMonitor.Add(monitor);
+            }
+            mailSubject = ConfigurationManager.AppSettings["mailSubject"];
+
+
         }
 
         public void Run()
@@ -58,7 +72,7 @@ namespace MailHeartBeat
             log.Info("Run MailHeartBeat for" + mailSubject);
             t = Task.Factory.StartNew(() =>
           {
-              log.Info("Staring MailHeartBeat for" + mailSubject);
+              log.Info("Starting MailHeartBeat for" + mailSubject);
               CheckWaitTime = initialCheckWaitTime;
               while (canRun)
               {
@@ -153,7 +167,7 @@ namespace MailHeartBeat
             builder.From.Add(new MailBox("Do-not-Reply@MailHeartBeat.GOV"));
             builder.Subject = "Alert from Mail Heart Beat";
             builder.PriorityHigh();
-            builder.Text = "Mail has not been received from " + mailMonitor + " in 24 hours";
+            builder.Text = "Mail has not been received from " + mailSubject + " in 24 hours";
             return builder.Create();
         }
         void sendStatusUpdate(IEnumerable<IMail> mails)
