@@ -1,0 +1,5 @@
+MailHeartBeat/bin/Debug/rolling-log.txt.5
+*.txt
+MailHeartBeat/bin/Debug/rolling-log.txt.1
+*rolling-log.txt.*
+*.manifest

@@ -54,7 +54,7 @@ namespace MailHeartBeat
 
         protected override void OnStart(string[] args)
         {
-            log.Info(" Starting Service");
+            log.Info("Starting Service");
             hbl.Run();
             
         }

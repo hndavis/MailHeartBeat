@@ -16,7 +16,7 @@ using Limilabs.Client;
 using System.Configuration;
 
 
-[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace MailHeartBeat
 {
     internal class HeartBeatListener
